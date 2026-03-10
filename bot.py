@@ -43,7 +43,7 @@ async def bundle(ctx):
         return
 
     msg, attachment = random.choice(attachments)
-
+)
    try:
     await ctx.author.send(f"{attachment.url}")
 except discord.HTTPException:
