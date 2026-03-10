@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import random
 import os
+import asyncio
+await asyncio.sleep(1)
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -42,15 +44,12 @@ async def bundle(ctx):
 
     msg, attachment = random.choice(attachments)
 
-    try:
-        await ctx.author.send(
-            content=(
-                f"📂 **Channel:** {random_channel.mention}\n"
-                f"👤 **Uploaded by:** {msg.author}\n"
-                f"🔗 **Jump to message:** {msg.jump_url}"
-            ),
-            file=await attachment.to_file()
-        )
+   try:
+    await ctx.author.send(f"{attachment.url}")
+except discord.HTTPException:
+    await ctx.reply("⚠️ Discord blocked the DM temporarily.")
+
+await asyncio.sleep(1)
     except discord.Forbidden:
         await ctx.reply("❌ I can't DM you. Enable DMs from server members.")
 
