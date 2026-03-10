@@ -7,9 +7,13 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
-intents.guilds = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+
+@bot.event
+async def on_ready():
+    print(f"✅ Logged in as {bot.user}")
 
 
 @bot.command()
@@ -17,29 +21,38 @@ async def bundle(ctx):
 
     await ctx.reply("📬 Check your DMs!")
 
-    valid_channels = [
+    channels = [
         c for c in ctx.guild.text_channels
         if c.permissions_for(ctx.guild.me).read_message_history
     ]
 
-    random.shuffle(valid_channels)
+    random_channel = random.choice(channels)
 
-    for channel in valid_channels:
+    attachments = []
 
-        attachments = []
+    async for msg in random_channel.history(limit=2000):
 
-        async for msg in channel.history(limit=5000):
-            if msg.attachments:
-                for a in msg.attachments:
-                    attachments.append((msg, a))
+        if msg.attachments:
+            for file in msg.attachments:
+                attachments.append((msg, file))
 
-        if attachments:
-            msg, file = random.choice(attachments)
+    if not attachments:
+        await ctx.author.send("❌ No files found in that channel. Try again.")
+        return
 
-            await ctx.author.send(
-                content=f"📂 From {channel.mention}\n🔗 {msg.jump_url}",
-                file=await file.to_file()
-            )
-            return
+    msg, attachment = random.choice(attachments)
 
-    await ctx.author.send("❌ No attachments found in any channel.")
+    try:
+        await ctx.author.send(
+            content=(
+                f"📂 **Channel:** {random_channel.mention}\n"
+                f"👤 **Uploaded by:** {msg.author}\n"
+                f"🔗 **Jump to message:** {msg.jump_url}"
+            ),
+            file=await attachment.to_file()
+        )
+    except discord.Forbidden:
+        await ctx.reply("❌ I can't DM you. Enable DMs from server members.")
+
+
+bot.run(TOKEN)
