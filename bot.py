@@ -17,7 +17,7 @@ async def on_ready():
 
 @bot.command()
 async def bundle(ctx):
-    await ctx.reply("📬 Check your DMs!")
+    await ctx.reply("check ur dms g")
 
     # Get all text channels where the bot can read messages
     channels = [
