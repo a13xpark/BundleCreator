@@ -11,12 +11,20 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+# Add blocked user IDs here
+BLOCKED_USERS = {1284237690111262853}
+
 @bot.event
 async def on_ready():
     print(f"✅ Logged in as {bot.user}")
 
 @bot.command()
 async def bundle(ctx):
+    # Check if the user is blocked
+    if ctx.author.id in BLOCKED_USERS:
+        await ctx.reply("fuck off qf yeah")
+        return
+
     await ctx.reply("check ur dms g")
 
     # Get all text channels where the bot can read messages
@@ -51,6 +59,6 @@ async def bundle(ctx):
             await ctx.reply("⚠️ Discord blocked the DM temporarily.")
         except discord.Forbidden:
             await ctx.reply("❌ I can't DM you. Enable DMs from server members.")
-            break  # Stop if we can't DM the user
+            break
 
 bot.run(TOKEN)
