@@ -12,7 +12,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Add blocked user IDs here
-BLOCKED_USERS = {}
+BLOCKED_USERS = {1488303946035630131}
 
 @bot.event
 async def on_ready():
@@ -22,7 +22,7 @@ async def on_ready():
 async def bundle(ctx):
     # Check if the user is blocked
     if ctx.author.id in BLOCKED_USERS:
-        await ctx.reply("fuck off qf yeah")
+        await ctx.reply("fuck off nigger")
         return
 
     await ctx.reply("check ur dms g")
