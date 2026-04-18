@@ -12,7 +12,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Add blocked user IDs here
-BLOCKED_USERS = {1488303946035630131, 525129432927698944}
+BLOCKED_USERS = {1488303946035630134}
 
 @bot.event
 async def on_ready():
